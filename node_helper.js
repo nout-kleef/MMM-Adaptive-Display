@@ -1,62 +1,55 @@
 const NodeHelper = require("node_helper");
-const exec = require("child_process").exec;
+const childProcess = require("child_process");
+const exec = require("util").promisify(childProcess.exec);
 
 module.exports = NodeHelper.create({
 	start: function () {
-		this.isMonitorOn(function(result) {
-			console.log("MMM-MotionDetector: monitor on " + result);
-		});
+		const isMonitorOn = this.isMonitorOn();
+		console.log("MMM-MotionDetector: monitor on " + isMonitorOn);
 	},
 
-	activateMonitor: function () {
-		this.isMonitorOn(function(result) {
-			if (!result) {
-				exec("vcgencmd display_power 1", function(err, out, code) {
-					if (err) {
-						console.error("MMM-MotionDetector: error activating monitor: " + code);
-					} else {
-						console.log("MMM-MotionDetector: monitor has been activated");
-					}
-				});
-			}
-		});
+	activateMonitor: async function () {
+		const isMonitorOn = this.isMonitorOn();
+		if (!isMonitorOn) {
+			await exec("vcgencmd display_power 1");
+		}
 	},
 
-	deactivateMonitor: function () {
-		this.isMonitorOn(function(result) {
-			if (result) {
-				exec("vcgencmd display_power 0", function(err, out, code) {
-					if (err) {
-						console.error("MMM-MotionDetector: error deactivating monitor: " + code);
-					} else {
-						console.log("MMM-MotionDetector: monitor has been deactivated");
-					}
-				});
-			}
-		});
+	deactivateMonitor: async function () {
+		const isMonitorOn = this.isMonitorOn();
+		if (isMonitorOn) {
+			await exec("vcgencmd display_power 0");
+		}
 	},
 
-	isMonitorOn: function(resultCallback) {
-		exec("vcgencmd display_power", function(err, out, code) {
-			if (err) {
-				console.error("MMM-MotionDetector: error calling monitor status: " + code);
-				return;
-			}
-
+	isMonitorOn: async () => {
+		try {
+			const out = await exec("vcgencmd display_power");
 			console.log("MMM-MotionDetector: monitor " + out);
-			resultCallback(out.includes("=1"));
-		});
+			return out.includes("=1");
+		} catch (error) {
+			console.error("MMM-MotionDetector: error calling monitor status: " + error);
+			return false;
+		}
 	},
 
 	// Subclass socketNotificationReceived received.
 	socketNotificationReceived: function (notification, payload) {
 		if (notification === "MOTION_DETECTED") {
 			console.log("MMM-MotionDetector: MOTION_DETECTED, score " + payload.score);
-			this.activateMonitor();
+			this.activateMonitor().then(() => {
+				console.log("MMM-MotionDetector: monitor has been activated");
+			}).catch(error => {
+				console.error("MMM-MotionDetector: error activating monitor: " + error);
+			});
 		}
 		if (notification === "DEACTIVATE_MONITOR") {
 			console.log("MMM-MotionDetector: DEACTIVATE_MONITOR, percentage off: " + payload.percentageOff);
-			this.deactivateMonitor();
+			this.deactivateMonitor().then(() => {
+				console.log("MMM-MotionDetector: monitor has been deactivated");
+			}).catch(error => {
+				console.error("MMM-MotionDetector: error deactivating monitor: " + error);
+			});
 		}
 	}
 });
