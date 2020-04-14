@@ -28,7 +28,7 @@ module.exports = NodeHelper.create({
 			console.log("MMM-MotionDetector: monitor " + JSON.stringify(result.stdout));
 			return result.stdout.includes("=1");
 		} catch (error) {
-			console.error("MMM-MotionDetector: error calling monitor status: " + result.stderr);
+			console.error("MMM-MotionDetector: error calling monitor status: " + error);
 			return false;
 		}
 	},
