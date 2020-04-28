@@ -6,7 +6,11 @@ module.exports = NodeHelper.create({
 	start: function () {
 		const isMonitorOn = this.isMonitorOn();
 		console.log(JSON.stringify(isMonitorOn));
-		console.log("MMM-MotionDetector: monitor is " + isMonitorOn);
+		this.activateMonitor().then(() => {
+			console.log("MMM-MotionDetector: monitor has been activated");
+		}).catch(error => {
+			console.error("MMM-MotionDetector: error activating monitor: " + error);
+		});
 	},
 
 	activateMonitor: async function () {

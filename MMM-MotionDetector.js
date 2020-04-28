@@ -57,7 +57,7 @@ Module.register("MMM-MotionDetector", {
 		this.timeStarted = new Date().getTime();
 
 		// make sure that the monitor is on when starting
-		this.sendSocketNotification("MOTION_DETECTED", {score: 0});
+		this.sendSocketNotification("MOTION_DETECTED", { score: "initializing" });
 
 		const canvas = document.createElement("canvas");
 		const video = document.createElement("video");
@@ -79,8 +79,7 @@ Module.register("MMM-MotionDetector", {
 				this.error = error;
 				this.updateDom();
 			},
-			captureCallback: (payload) => {
-				const score = payload.score;
+      		captureCallback: ({ score }) => {
 				const currentDate = new Date();
 				this.percentagePoweredOff = (100 * this.poweredOffTime / (currentDate.getTime() - this.timeStarted)).toFixed(2);
 				if (score > this.config.scoreThreshold) {
