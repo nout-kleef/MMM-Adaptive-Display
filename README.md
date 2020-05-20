@@ -1,11 +1,11 @@
-# MMM-MotionDetector
+# MMM-Adaptive-Display
 
 ## Installation
 
 Just clone the module into your MagicMirror modules folder:
 
 ```
-git clone https://github.com/rejas/MMM-MotionDetector.git
+git clone https://github.com/nout-kleef/MMM-Adaptive-Display.git
 ```
 
 ## Requirements
@@ -20,7 +20,7 @@ var config = {
 	...
 ``` 
 
-#### Configuring MotionDetector with another module that requires MagicMirror address to be 0.0.0.0
+#### Configuring Adaptive-Display with another module that requires MagicMirror address to be 0.0.0.0
 
 You can do this by doing a simple workaround. You need to config the MagicMirror address to localhost (default) and set up a reverse proxy for the other module.
 
@@ -88,7 +88,7 @@ To use this module, add it to the modules array in the `config/config.js` file:
 ````javascript
 modules: [
 	{
-		module: "MMM-MotionDetector",
+		module: "MMM-Adaptive-Display",
 		position: "top_left",	// Optional. This can be any of the regions. Displays debug informations.
 		config: {
 			// The config property is optional.
@@ -169,5 +169,6 @@ config: {
 ## Acknowledgements
 
 Many thanks to 
+- [rejas](https://github.com/rejas/MMM-MotionDetector) for the motion detection module
 - [alexyak](https://github.com/alexyak/motiondetector) for the original module code
 - [lonekorean](https://github.com/lonekorean/diff-cam-engine/) for the diffcam engine code.
