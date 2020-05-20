@@ -1,9 +1,10 @@
 Module.register("MMM-Adaptive-Display", {
 
 	defaults: {
-		captureIntervalTime: 1000, // 1 second
-		scoreThreshold: 20,
-		timeout: 120000 // 2 minutes
+		captureIntervalTime: 3000, // 3 seconds
+		scoreThreshold: 10,
+		timeout: 120000, // 2 minutes
+		adjustContrast: true
 	},
 
 	lastScoreDetected: null,
@@ -13,6 +14,13 @@ Module.register("MMM-Adaptive-Display", {
 	poweredOff: false,
 	poweredOffTime: 0,
 	timeStarted: null,
+        contrast: null, // display's contrast
+	brightness: null, // display's brightness
+	illumination: { // correlates to the amount of light in the room
+		curr: null,
+	        min: null,
+                max: null
+	},
 	error: null,
 
 	getHeader: function () {
@@ -36,6 +44,11 @@ Module.register("MMM-Adaptive-Display", {
 			lastScoreDetected: this.lastScoreDetected,
 			lastTimeMotionDetected: this.lastTimeMotionDetected.toLocaleTimeString(),
 			percentagePoweredOff: this.percentagePoweredOff,
+			contrast: this.contrast,
+			brightness: this.brightness,
+			illumination: this.illumination.curr,
+			minIllumination: this.illumination.min,
+			maxIllumination: this.illumination.max,
 			error: this.error
 		};
 	},
