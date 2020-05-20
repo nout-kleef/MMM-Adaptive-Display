@@ -2,23 +2,15 @@
 {% if error %}
     <div class="light small bold">{{error}}</div>
 {% else %}
-    <div class="light small bold">Motion detection</div>
-    <div class="light small normal">
-        motion detected at: <span class="bright">{{lastTimeMotionDetected}}</span> (score: <span class="bright">{{lastScoreDetected}}</span>)
-    </div>
-    <div class="light small normal">
-        powered off: <span class="bright">{{duration}}</span> (<span class="bright">{{percentagePoweredOff}} %</span> of uptime)
-    </div>
-    <div class="light small bold">Adaptive brightness</div>
     <div class="light small normal">
         display: <span class="bright">{{contrast}}</span> (contrast), <span class="bright">{{brightness}}</span> (brightness)
     </div>
     <div class="light small normal">
-        current illumination: <span class="bright">{{illumination}}</span>
+        location: <span class="bright">{{location}}</span> ({{localTime}})<br/>
+        dawn: ..., dusk: ...
     </div>
     <div class="light small normal">
-        illumination bounds: <span class="bright">{{minIllumination}}</span> (min),
-            <span class="bright">{{maxIllumination}}</span> (max)
+        current illumination: <span class="bright">{{illumination}}</span>
     </div>
 {% endif %}
 </div>
